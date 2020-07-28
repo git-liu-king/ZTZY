@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/mNot_text"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:text="@string/alarm_not_text"
+        android:textSize="@dimen/sp_16"
+        android:visibility="gone"
+        android:gravity="center"/>
+
+    <include layout="@layout/layout_rlv_refresh"/>
+
+</RelativeLayout>

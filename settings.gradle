@@ -1,0 +1,4 @@
+include ':app'
+include ':frame'
+include ':bean'
+rootProject.name = "Machine_room"

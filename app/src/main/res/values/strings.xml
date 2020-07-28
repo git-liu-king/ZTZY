@@ -1,0 +1,34 @@
+<resources>
+    <string name="app_name">ZTZY</string>
+
+    <!--MainActivity-->
+    <string name="home">首页</string>
+    <string name="message">消息</string>
+    <string name="mine">我的</string>
+
+    <!--DeviceActivity-->
+    <string name="device">设备</string>
+
+    <!--AlarmActivity-->
+    <string name="alarm">警报</string>
+    <string name="alarm_not_text">目前暂无报警设备!!!</string>
+    <string name="alarm_sent_alarm">已处理</string>
+    <string name="alarm_not_alarm">未处理</string>
+
+    <!--TaskActivity-->
+    <string name="task">任务</string>
+    <string name="task_not_text">未完成</string>
+    <string name="task_sent_text">已完成</string>
+    
+    <!--MessageFragment-->
+    <string name="message_not_read">未读</string>
+    <string name="message_sent_read">已读</string>
+
+    <!--NotReadFragment-->
+    <string name="not_read_text">目前暂无消息</string>
+
+
+    <!--SentReadFragment-->
+    <string name="sent_read_text">目前暂无已读消息</string>
+    
+</resources>
