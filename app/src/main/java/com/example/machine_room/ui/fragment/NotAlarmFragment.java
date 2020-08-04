@@ -17,6 +17,7 @@ import com.example.machine_room.bean.DeviceInfo;
 import com.example.machine_room.config.SpConfig;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;

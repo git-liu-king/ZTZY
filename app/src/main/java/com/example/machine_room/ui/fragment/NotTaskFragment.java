@@ -1,15 +1,18 @@
 package com.example.machine_room.ui.fragment;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -54,7 +57,11 @@ public class NotTaskFragment extends BaseFragment<MainModel> implements IMainVie
     RecyclerView mRlv;
     @BindView(R.id.mRefreshLayout)
     SmartRefreshLayout mRefreshLayout;
+    @BindView(R.id.mTask_btn_affirm)
+    TextView mTaskBtnAffirm;
     private Context mContext;
+    private DeviceRlvAdapter mAdapter;
+    private List<DeviceInfo> mList;
 
     public static NotTaskFragment getInstance(String pName) {
         NotTaskFragment localFragment = new NotTaskFragment();
@@ -88,7 +95,7 @@ public class NotTaskFragment extends BaseFragment<MainModel> implements IMainVie
         }
 
         mContext = getContext();
-        List<DeviceInfo> localList = SharedPrefrenceUtils.getSerializableList(mContext, SpConfig.DEVICE_DATA);
+        mList = SharedPrefrenceUtils.getSerializableList(mContext, SpConfig.DEVICE_DATA);
 
         mTaskRoomImage.setImageResource(R.drawable.ic_launcher_background);
         if (!TextUtils.isEmpty(localRoomName)) mTaskRoomName.setText(localRoomName);
@@ -96,11 +103,11 @@ public class NotTaskFragment extends BaseFragment<MainModel> implements IMainVie
         mTaskPersonName.setText("负责人:LLL");
         mTaskPersonPhone.setText("联系电话:15136793835");
 
-        if (localList != null && localList.size() > 0) {
+        if (mList != null && mList.size() > 0) {
             mRlv.setLayoutManager(new LinearLayoutManager(mContext));
-            DeviceRlvAdapter localAdapter = new DeviceRlvAdapter(localList, mContext, mRlv, DeviceRlvAdapter.NOTTASK_FRAGMENT);
-            mRlv.setAdapter(localAdapter);
-            localAdapter.notifyDataSetChanged();
+            mAdapter = new DeviceRlvAdapter(mList, mContext, DeviceRlvAdapter.NOTTASK_FRAGMENT);
+            mRlv.setAdapter(mAdapter);
+            mAdapter.notifyDataSetChanged();
         }
 
     }
@@ -108,6 +115,7 @@ public class NotTaskFragment extends BaseFragment<MainModel> implements IMainVie
     @Override
     protected void initListener() {
         mLinearCallPhone.setOnClickListener(this);
+        mTaskBtnAffirm.setOnClickListener(this);
     }
 
     @Override
@@ -117,7 +125,44 @@ public class NotTaskFragment extends BaseFragment<MainModel> implements IMainVie
                 if (SimUtils.readSIMCard()) callPhone();
                 else Toast.makeText(mContext, "请插入SIM卡", Toast.LENGTH_SHORT).show();
                 break;
+            case R.id.mTask_btn_affirm:
+                affirmTask();
+                break;
         }
+    }
+
+    private void affirmTask() {
+        if (mAdapter != null) {
+            if (mAdapter.judgeTaskStatus()) {
+                SharedPrefrenceUtils.saveBoolean(mContext,SpConfig.TASK_FLAG,true);
+                Toast.makeText(mContext, "已完成", Toast.LENGTH_SHORT).show();
+            } else {
+                showDialog();
+            }
+        }
+    }
+
+    private void showDialog() {
+        new AlertDialog.Builder(mContext)
+                .setTitle("提示")
+                .setIcon(R.drawable.ic_launcher_background)
+                .setMessage("该任务还有未检查的设备,是否结束任务")
+                .setPositiveButton("确认", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        SharedPrefrenceUtils.saveBoolean(mContext,SpConfig.TASK_FLAG,false);
+                        SharedPrefrenceUtils.putSerializableList(mContext,SpConfig.DEVICE_TASK,mList);
+                        Toast.makeText(mContext, "结束", Toast.LENGTH_SHORT).show();
+                    }
+                })
+                .setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        Toast.makeText(mContext, "未结束", Toast.LENGTH_SHORT).show();
+                    }
+                })
+                .create()
+                .show();
     }
 
     private void callPhone() {

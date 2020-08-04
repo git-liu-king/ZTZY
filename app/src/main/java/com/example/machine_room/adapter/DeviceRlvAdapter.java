@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -43,16 +44,15 @@ public class DeviceRlvAdapter extends BaseRlvAdapter implements View.OnClickList
     private List<DeviceInfo> mList;
     private Context mContext;
     private ArrayList<DeviceInfo> mAlarmList;
-    private RecyclerView mRlv;
     private int mFlag;
     private final LayoutInflater mInflater;
     private PopupWindow mWindow;
+    private ArrayList<Boolean> mTaskFlag = new ArrayList<>();
 
-    public DeviceRlvAdapter(List<DeviceInfo> pList, Context pContext, RecyclerView pRlv, int pFlag) {
+    public DeviceRlvAdapter(List<DeviceInfo> pList, Context pContext, int pFlag) {
         mList = pList;
         mContext = pContext;
         mFlag = pFlag;
-        mRlv = pRlv;
         mInflater = LayoutInflater.from(mContext);
     }
 
@@ -64,8 +64,8 @@ public class DeviceRlvAdapter extends BaseRlvAdapter implements View.OnClickList
     }
 
     @Override
-    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
-        ItemHolder localHolder = (ItemHolder) holder;
+    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, final int position) {
+        final ItemHolder localHolder = (ItemHolder) holder;
 
         int localType = getItemViewType(position);
         if (localType != 0) {
@@ -91,9 +91,12 @@ public class DeviceRlvAdapter extends BaseRlvAdapter implements View.OnClickList
             localHolder.mDeviceView.setVisibility(View.VISIBLE);
             localHolder.mDeviceLinear.setVisibility(View.VISIBLE);
         } else if (mFlag == NOTTASK_FRAGMENT) {
+
             localHolder.mDeviceLinear.setVisibility(View.GONE);
             localHolder.mDeviceView.setVisibility(View.GONE);
             localHolder.mDeviceTask.setVisibility(View.VISIBLE);
+
+            localHolder.mDeviceTask.setText(mList.get(position).getTaskStatus());
 
             View localView = mInflater.inflate(R.layout.layout_not_task_pop, null);
             mWindow = new PopupWindow(localView,
@@ -102,7 +105,14 @@ public class DeviceRlvAdapter extends BaseRlvAdapter implements View.OnClickList
             TextView localPopNormal = localView.findViewById(R.id.pop_normal);
             TextView localPopException = localView.findViewById(R.id.pop_exception);
 
-            localHolder.mDeviceTask.setOnClickListener(this);
+            localHolder.mDeviceTask.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (mList.get(position).isTaskFlag())
+                        Toast.makeText(mContext, "该设备已检查", Toast.LENGTH_SHORT).show();
+                    else showDialog(position);
+                }
+            });
             localPopRelative.setOnClickListener(this);
             localPopNormal.setOnClickListener(this);
             localPopException.setOnClickListener(this);
@@ -123,11 +133,11 @@ public class DeviceRlvAdapter extends BaseRlvAdapter implements View.OnClickList
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.device_task:
+        /*switch (v.getId()) {
+         *//*case R.id.device_task:
                 //mWindow.showAtLocation(mRlv, Gravity.CENTER, 0, 0);
-                showDialog();
-                break;
+
+                break;*//*
             case R.id.pop_relative:
                 mWindow.dismiss();
                 break;
@@ -139,10 +149,10 @@ public class DeviceRlvAdapter extends BaseRlvAdapter implements View.OnClickList
             case R.id.pop_normal:
                 mWindow.dismiss();
                 break;
-        }
+        }*/
     }
 
-    private void showDialog() {
+    private void showDialog(final int pPosition) {
 
         AlertDialog.Builder localDialog = new AlertDialog.Builder(mContext);
 
@@ -158,10 +168,14 @@ public class DeviceRlvAdapter extends BaseRlvAdapter implements View.OnClickList
                 switch (which) {
                     case AlertDialog.BUTTON_POSITIVE:
                         mContext.startActivity(new Intent(mContext, ExceptionActivity.class));
-                        Toast.makeText(mContext, "确认", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(mContext, "存在", Toast.LENGTH_SHORT).show();
                         break;
                     case AlertDialog.BUTTON_NEGATIVE:
-                        Toast.makeText(mContext, "取消", Toast.LENGTH_SHORT).show();
+                        mList.get(pPosition).setTaskStatus("已检查");
+                        mList.get(pPosition).setTaskFlag(true);
+                        mTaskFlag.add(mList.get(pPosition).isTaskFlag());
+                        notifyItemChanged(pPosition);
+                        Toast.makeText(mContext, "不存在", Toast.LENGTH_SHORT).show();
                         break;
                     case AlertDialog.BUTTON_NEUTRAL:
                         Toast.makeText(mContext, "忽略", Toast.LENGTH_SHORT).show();
@@ -178,6 +192,17 @@ public class DeviceRlvAdapter extends BaseRlvAdapter implements View.OnClickList
                 .setNeutralButton("忽略", localDialogOnClick)
                 .create()
                 .show();
+    }
+
+    public boolean judgeTaskStatus() {
+        if (mList != null && mList.size() > 0 && mTaskFlag != null && mTaskFlag.size() > 0) {
+            if (mList.size() == mTaskFlag.size()) {
+                SharedPrefrenceUtils.putSerializableList(mContext,SpConfig.DEVICE_TASK,mList);
+                return true;
+            } else return false;
+        }
+
+        return false;
     }
 
     class ItemHolder extends RecyclerView.ViewHolder {

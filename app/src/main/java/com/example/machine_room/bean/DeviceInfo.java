@@ -14,8 +14,10 @@ public class DeviceInfo implements Serializable {
     private String mDate;
     private int mImage;
     private boolean mFlag;
+    private boolean mTaskFlag;
+    private String mTaskStatus;
 
-    public DeviceInfo(String pName, String pStatus, String pDetails, String pAlarmText, String pDate, int pImage, boolean pFlag) {
+    public DeviceInfo(String pName, String pStatus, String pDetails, String pAlarmText, String pDate, int pImage, boolean pFlag,boolean pTaskFlag,String pTaskStatus) {
         mName = pName;
         mStatus = pStatus;
         mDetails = pDetails;
@@ -23,6 +25,8 @@ public class DeviceInfo implements Serializable {
         mDate = pDate;
         mImage = pImage;
         mFlag = pFlag;
+        mTaskFlag = pTaskFlag;
+        mTaskStatus = pTaskStatus;
     }
 
     public String getName() {
@@ -81,6 +85,22 @@ public class DeviceInfo implements Serializable {
         mFlag = pFlag;
     }
 
+    public boolean isTaskFlag() {
+        return mTaskFlag;
+    }
+
+    public void setTaskFlag(boolean pTaskFlag) {
+        mTaskFlag = pTaskFlag;
+    }
+
+    public String getTaskStatus() {
+        return mTaskStatus;
+    }
+
+    public void setTaskStatus(String pTaskStatus) {
+        mTaskStatus = pTaskStatus;
+    }
+
     @Override
     public String toString() {
         return "DeviceInfo{" +
@@ -91,6 +111,8 @@ public class DeviceInfo implements Serializable {
                 ", mDate='" + mDate + '\'' +
                 ", mImage=" + mImage +
                 ", mFlag=" + mFlag +
+                ", mTaskFlag=" + mTaskFlag +
+                ", mTaskStatus='" + mTaskStatus + '\'' +
                 '}';
     }
 }

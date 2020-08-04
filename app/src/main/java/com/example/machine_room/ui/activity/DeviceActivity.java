@@ -88,9 +88,11 @@ public class DeviceActivity extends BaseActivity<MainModel> implements IMainView
                             "正常",
                             "设备详情",
                             "警报信息",
-                            "2020-7-15",
+                            "2020-8-20-9:00",
                             R.drawable.ic_launcher_background,
-                            false));
+                            false,
+                            false,
+                            "检查"));
         }
 
         localList.get(5).setFlag(true);
@@ -105,7 +107,8 @@ public class DeviceActivity extends BaseActivity<MainModel> implements IMainView
 
         SharedPrefrenceUtils.putSerializableList(this, SpConfig.DEVICE_DATA, localList);
         mRlv.setLayoutManager(new LinearLayoutManager(this));
-        DeviceRlvAdapter localAdapter = new DeviceRlvAdapter(localList, this,mRlv, DeviceRlvAdapter.DEVICE_ACTIVITY);
+
+        DeviceRlvAdapter localAdapter = new DeviceRlvAdapter(localList, this, DeviceRlvAdapter.DEVICE_ACTIVITY);
         mRlv.setAdapter(localAdapter);
     }
 

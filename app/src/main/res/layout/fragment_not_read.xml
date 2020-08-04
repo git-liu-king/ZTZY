@@ -7,10 +7,10 @@
         android:id="@+id/mNot_read"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/not_read_text"
         android:layout_centerInParent="true"
+        android:text="@string/not_read_text"
         android:textSize="@dimen/sp_20" />
 
-    <include layout="@layout/layout_rlv_refresh"/>
+    <include layout="@layout/layout_rlv_refresh" />
 
 </RelativeLayout>

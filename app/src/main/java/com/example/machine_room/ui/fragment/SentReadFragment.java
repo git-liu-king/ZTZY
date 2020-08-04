@@ -10,7 +10,7 @@ import com.example.machine_room.R;
  */
 public class SentReadFragment extends BaseFragment<MainModel> implements IMainView {
 
-    public static SentReadFragment getInstance(){
+    public static SentReadFragment getInstance() {
         SentReadFragment localFragment = new SentReadFragment();
         return localFragment;
     }

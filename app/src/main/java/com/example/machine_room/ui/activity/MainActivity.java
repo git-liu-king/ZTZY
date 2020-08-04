@@ -23,7 +23,7 @@ import butterknife.BindView;
 /**
  * Created by 刘博 on 2020/6/22
  */
-public class MianActivity extends BaseActivity implements IMainView, TabLayout.BaseOnTabSelectedListener {
+public class MainActivity extends BaseActivity implements IMainView, TabLayout.BaseOnTabSelectedListener {
 
     private final int HOME_FRAGMENT = 0;
     private final int MESSAGE_FRAGMENT = 1;
@@ -59,7 +59,7 @@ public class MianActivity extends BaseActivity implements IMainView, TabLayout.B
         mFragments.add(MineFragment.getInstance());
 
         mManager = getSupportFragmentManager();
-        mManager.beginTransaction().add(R.id.mFrame,mFragments.get(0)).commit();
+        mManager.beginTransaction().replace(R.id.mFrame,mFragments.get(0)).commit();
 
     }
 
@@ -73,13 +73,13 @@ public class MianActivity extends BaseActivity implements IMainView, TabLayout.B
         int localPosition = pTab.getPosition();
         switch (localPosition){
             case HOME_FRAGMENT:
-                switchFragment(HOME_FRAGMENT);
+                mManager.beginTransaction().replace(R.id.mFrame,mFragments.get(HOME_FRAGMENT)).commit();
                 break;
             case MESSAGE_FRAGMENT:
-                switchFragment(MESSAGE_FRAGMENT);
+                mManager.beginTransaction().replace(R.id.mFrame,mFragments.get(MESSAGE_FRAGMENT)).commit();
                 break;
             case MINE_FRAGMENT:
-                switchFragment(MINE_FRAGMENT);
+                mManager.beginTransaction().replace(R.id.mFrame,mFragments.get(MINE_FRAGMENT)).commit();
                 break;
         }
     }
@@ -94,7 +94,7 @@ public class MianActivity extends BaseActivity implements IMainView, TabLayout.B
 
     }
 
-    private void switchFragment(int pType) {
+    /*private void switchFragment(int pType) {
         FragmentTransaction localTransaction = mManager.beginTransaction();
         BaseFragment showFragment = mFragments.get(pType);
         if (!showFragment.isAdded()) {
@@ -105,5 +105,5 @@ public class MianActivity extends BaseActivity implements IMainView, TabLayout.B
         localTransaction.show(showFragment);
         localTransaction.commit();
         mHidePosition = pType;
-    }
+    }*/
 }
