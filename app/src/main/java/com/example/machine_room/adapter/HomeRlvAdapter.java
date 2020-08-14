@@ -43,7 +43,6 @@ public class HomeRlvAdapter extends BaseRlvAdapter {
     private ArrayList<RoomInfo> mList;
     private Context mContext;
 
-
     public HomeRlvAdapter(ArrayList<RoomInfo> pList, Context pContext) {
         mList = pList;
         mContext = pContext;

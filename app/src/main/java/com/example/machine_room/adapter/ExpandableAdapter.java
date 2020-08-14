@@ -9,6 +9,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.frame.base.BaseApp;
+import com.example.frame.base.IMianModel;
 import com.example.frame.utils.SharedPrefrenceUtils;
 import com.example.machine_room.R;
 import com.example.machine_room.bean.DeviceInfo;
@@ -27,11 +28,18 @@ public class ExpandableAdapter extends AnimatedExpandableListView.AnimatedExpand
     private List<DeviceInfo> mGroupList;
     private ArrayList<ArrayList<ItemInfo>> mItemList;
     private Context mContext;
+    private int mGroupPosition;
+    private boolean mFlag;
 
     public ExpandableAdapter(List<DeviceInfo> pGroupList, ArrayList<ArrayList<ItemInfo>> pItemList, Context pContext) {
         mGroupList = pGroupList;
         mItemList = pItemList;
         mContext = pContext;
+    }
+
+    public void setData(int pGroupPosition, boolean pFlag) {
+        mGroupPosition = pGroupPosition;
+        mFlag = pFlag;
     }
 
     @Override
@@ -74,10 +82,13 @@ public class ExpandableAdapter extends AnimatedExpandableListView.AnimatedExpand
             localHolder.mTaskGroupAffirm = convertView.findViewById(R.id.task_group_affirm);
             localHolder.mTaskGroupDate = convertView.findViewById(R.id.task_group_date);
             localHolder.mTaskGroupImage = convertView.findViewById(R.id.Task_group_image);
+
             convertView.setTag(localHolder);
         }else localHolder = (GroupHolder) convertView.getTag();
 
-        localHolder.mTaskGroupImage.setImageResource(mGroupList.get(groupPosition).getImage());
+        if (mFlag && mGroupPosition == groupPosition) localHolder.mTaskGroupImage.setImageResource(R.mipmap.ic_back_up);
+        else localHolder.mTaskGroupImage.setImageResource(R.mipmap.ic_back_down);
+
         localHolder.mTaskGroupDate.setText(mGroupList.get(groupPosition).getDate());
         if (SharedPrefrenceUtils.getBoolean(mContext, SpConfig.TASK_FLAG))
             localHolder.mTaskGroupAffirm.setText("完成");
@@ -105,6 +116,7 @@ public class ExpandableAdapter extends AnimatedExpandableListView.AnimatedExpand
         return convertView;
     }
 
+
     @Override
     public int getRealChildrenCount(int groupPosition) {
         return mItemList.get(groupPosition).size();
@@ -113,9 +125,6 @@ public class ExpandableAdapter extends AnimatedExpandableListView.AnimatedExpand
     @Override
     public boolean isChildSelectable(int groupPosition, int childPosition) {
         return true;
-    }
-
-    public void initView() {
     }
 
     class GroupHolder{

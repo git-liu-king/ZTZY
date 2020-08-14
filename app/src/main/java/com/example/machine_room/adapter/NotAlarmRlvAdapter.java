@@ -115,6 +115,7 @@ public class NotAlarmRlvAdapter extends BaseRlvAdapter {
             mNotAlarmName = itemView.findViewById(R.id.notAlarm_name);
             mNotAlarmNotOrSent = itemView.findViewById(R.id.notAlarm_notOrSent);
             mNotAlarmDate = itemView.findViewById(R.id.notAlarm_date);
+            mNotAlarmContent = itemView.findViewById(R.id.notAlarm_content);
         }
     }
 }

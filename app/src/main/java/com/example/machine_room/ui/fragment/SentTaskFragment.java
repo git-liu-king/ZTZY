@@ -27,11 +27,8 @@ public class SentTaskFragment extends BaseFragment<MainModel> implements IMainVi
 
     @BindView(R.id.mLv)
     AnimatedExpandableListView mLv;
-    /*@BindView(R.id.mRlv)
-    RecyclerView mRlv;
-    @BindView(R.id.mRefreshLayout)
-    SmartRefreshLayout mRefreshLayout;*/
     private Context mContext;
+    private ExpandableAdapter mAdapter;
 
     public static SentTaskFragment getInstance() {
         SentTaskFragment localFragment = new SentTaskFragment();
@@ -50,8 +47,7 @@ public class SentTaskFragment extends BaseFragment<MainModel> implements IMainVi
 
     @Override
     protected void initView() {
-        /*mRefreshLayout.setEnableLoadMore(false);
-        mRefreshLayout.setEnableRefresh(false);*/
+
         mLv.setGroupIndicator(null);
 
         mContext = getContext();
@@ -67,8 +63,8 @@ public class SentTaskFragment extends BaseFragment<MainModel> implements IMainVi
             for (int i = 0; i < mList.size(); i++) {
                 localItemList.add(localItemInfos);
             }
-            ExpandableAdapter localAdapter = new ExpandableAdapter(mList, localItemList, mContext);
-            mLv.setAdapter(localAdapter);
+            mAdapter = new ExpandableAdapter(mList, localItemList, mContext);
+            mLv.setAdapter(mAdapter);
         }
     }
 
@@ -81,8 +77,10 @@ public class SentTaskFragment extends BaseFragment<MainModel> implements IMainVi
     public boolean onGroupClick(ExpandableListView parent, View v, int groupPosition, long id) {
         if (mLv.isGroupExpanded(groupPosition)) {
             mLv.collapseGroupWithAnimation(groupPosition);
+            mAdapter.setData(groupPosition,false);
         } else {
             mLv.expandGroupWithAnimation(groupPosition);
+            mAdapter.setData(groupPosition,true);
         }
         return true;
     }

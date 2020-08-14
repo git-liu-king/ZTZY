@@ -29,7 +29,7 @@ public class CameraUtil {
     public static void changeFlashLight(boolean openOrClose) {
         //判断API是否大于24（安卓7.0系统对应的API）
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-
+            Toast.makeText(BaseApp.getContext(), "aaaa", Toast.LENGTH_SHORT).show();
             try {
                 //获取CameraManager
                 CameraManager mCameraManager = (CameraManager) BaseApp.getContext().getSystemService(BaseApp.getContext().CAMERA_SERVICE);
@@ -50,7 +50,7 @@ public class CameraUtil {
             }
 
         } else {
-
+            Toast.makeText(BaseApp.getContext(), "bbbb", Toast.LENGTH_SHORT).show();
             mCamera = Camera.open();
             Camera.Parameters parameters = mCamera.getParameters();
             if (openOrClose) {

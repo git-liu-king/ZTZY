@@ -80,6 +80,7 @@ public class DeviceActivity extends BaseActivity<MainModel> implements IMainView
         mToolBarTitleText.setText(R.string.device);
         mRefreshLayout.setEnableRefresh(false);
         mRefreshLayout.setEnableLoadMore(false);
+        mRlv.setFocusable(false);
 
         ArrayList<DeviceInfo> localList = new ArrayList<>();
         for (int i = 0; i < 20; i++) {

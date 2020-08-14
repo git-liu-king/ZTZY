@@ -10,7 +10,8 @@
     <com.google.android.material.tabs.TabLayout
         android:id="@+id/mTab"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+        android:background="@color/colorWhite"/>
 
     <com.example.machine_room.design.NoScrollViewPager
         android:id="@+id/mVp"

@@ -1,6 +1,7 @@
 package com.example.machine_room.push;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Message;
 import android.util.Log;
 
@@ -52,11 +53,11 @@ public class DemoIntentService extends GTIntentService {
         if (action == PushConsts.SET_TAG_RESULT) {
             setTagResult((SetTagCmdMessage) cmdMessage);
         } else if (action == PushConsts.BIND_ALIAS_RESULT) {
-            //bindAliasResult((BindAliasCmdMessage) cmdMessage);
+            bindAliasResult((BindAliasCmdMessage) cmdMessage);
         } else if (action == PushConsts.UNBIND_ALIAS_RESULT) {
-            //unbindAliasResult((UnBindAliasCmdMessage) cmdMessage);
+            unbindAliasResult((UnBindAliasCmdMessage) cmdMessage);
         } else if ((action == PushConsts.THIRDPART_FEEDBACK)) {
-            //feedbackResult((FeedbackCmdMessage) cmdMessage);
+            feedbackResult((FeedbackCmdMessage) cmdMessage);
         }
     }
 
@@ -67,7 +68,8 @@ public class DemoIntentService extends GTIntentService {
 
     // 通知点击，只有个推通道下发的通知会回调此方法
     @Override
-    public void onNotificationMessageClicked(Context context, GTNotificationMessage msg) {   
+    public void onNotificationMessageClicked(Context context, GTNotificationMessage msg) {
+        startActivity(new Intent());
     }
 
     private void setTagResult(SetTagCmdMessage setTagCmdMsg) {
@@ -115,6 +117,101 @@ public class DemoIntentService extends GTIntentService {
 
         //sendMessage(getResources().getString(text), DemoApplication.DemoHandler.SHOW_TOAST);
         Log.d(TAG, "settag result sn = " + sn + ", code = " + code + ", text = " + getResources().getString(text));
+    }
+
+    private void bindAliasResult(BindAliasCmdMessage bindAliasCmdMessage) {
+        String sn = bindAliasCmdMessage.getSn();
+        String code = bindAliasCmdMessage.getCode();
+
+        int text = R.string.bind_alias_unknown_exception;
+        switch (Integer.parseInt(code)) {
+            case PushConsts.BIND_ALIAS_SUCCESS:
+                text = R.string.bind_alias_success;
+                break;
+            case PushConsts.ALIAS_ERROR_FREQUENCY:
+                text = R.string.bind_alias_error_frequency;
+                break;
+            case PushConsts.ALIAS_OPERATE_PARAM_ERROR:
+                text = R.string.bind_alias_error_param_error;
+                break;
+            case PushConsts.ALIAS_REQUEST_FILTER:
+                text = R.string.bind_alias_error_request_filter;
+                break;
+            case PushConsts.ALIAS_OPERATE_ALIAS_FAILED:
+                text = R.string.bind_alias_unknown_exception;
+                break;
+            case PushConsts.ALIAS_CID_LOST:
+                text = R.string.bind_alias_error_cid_lost;
+                break;
+            case PushConsts.ALIAS_CONNECT_LOST:
+                text = R.string.bind_alias_error_connect_lost;
+                break;
+            case PushConsts.ALIAS_INVALID:
+                text = R.string.bind_alias_error_alias_invalid;
+                break;
+            case PushConsts.ALIAS_SN_INVALID:
+                text = R.string.bind_alias_error_sn_invalid;
+                break;
+            default:
+                break;
+
+        }
+        //sendMessage(getResources().getString(text), DemoApplication.DemoHandler.SHOW_TOAST);
+        Log.d(TAG, "bindAlias result sn = " + sn + ", code = " + code + ", text = " + getResources().getString(text));
+
+    }
+
+    private void unbindAliasResult(UnBindAliasCmdMessage unBindAliasCmdMessage) {
+        String sn = unBindAliasCmdMessage.getSn();
+        String code = unBindAliasCmdMessage.getCode();
+
+        int text = R.string.unbind_alias_unknown_exception;
+        switch (Integer.parseInt(code)) {
+            case PushConsts.UNBIND_ALIAS_SUCCESS:
+                text = R.string.unbind_alias_success;
+                break;
+            case PushConsts.ALIAS_ERROR_FREQUENCY:
+                text = R.string.unbind_alias_error_frequency;
+                break;
+            case PushConsts.ALIAS_OPERATE_PARAM_ERROR:
+                text = R.string.unbind_alias_error_param_error;
+                break;
+            case PushConsts.ALIAS_REQUEST_FILTER:
+                text = R.string.unbind_alias_error_request_filter;
+                break;
+            case PushConsts.ALIAS_OPERATE_ALIAS_FAILED:
+                text = R.string.unbind_alias_unknown_exception;
+                break;
+            case PushConsts.ALIAS_CID_LOST:
+                text = R.string.unbind_alias_error_cid_lost;
+                break;
+            case PushConsts.ALIAS_CONNECT_LOST:
+                text = R.string.unbind_alias_error_connect_lost;
+                break;
+            case PushConsts.ALIAS_INVALID:
+                text = R.string.unbind_alias_error_alias_invalid;
+                break;
+            case PushConsts.ALIAS_SN_INVALID:
+                text = R.string.unbind_alias_error_sn_invalid;
+                break;
+            default:
+                break;
+
+        }
+        //sendMessage(getResources().getString(text), DemoApplication.DemoHandler.SHOW_TOAST);
+        Log.d(TAG, "unbindAlias result sn = " + sn + ", code = " + code + ", text = " + getResources().getString(text));
+    }
+
+    private void feedbackResult(FeedbackCmdMessage feedbackCmdMsg) {
+        String appId = feedbackCmdMsg.getAppid();
+        String taskId = feedbackCmdMsg.getTaskId();
+        String actionId = feedbackCmdMsg.getActionId();
+        String result = feedbackCmdMsg.getResult();
+        long timestamp = feedbackCmdMsg.getTimeStamp();
+        String cid = feedbackCmdMsg.getClientId();
+
+        Log.d(TAG, "onReceiveCommandResult -> " + "appid = " + appId + "\ntaskid = " + taskId + "\nactionid = " + actionId + "\nresult = " + result
+                + "\ncid = " + cid + "\ntimestamp = " + timestamp);
     }
 
     private void sendMessage(String data, int what) {

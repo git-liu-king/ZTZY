@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <TextView
+    <!--<TextView
         android:id="@+id/mNot_read"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -11,6 +11,11 @@
         android:text="@string/not_read_text"
         android:textSize="@dimen/sp_20" />
 
-    <include layout="@layout/layout_rlv_refresh" />
+    <include layout="@layout/layout_rlv_refresh" />-->
+
+    <WebView
+        android:id="@+id/mWeb"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
 
 </RelativeLayout>

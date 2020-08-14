@@ -35,6 +35,7 @@ import java.util.List;
 import butterknife.BindView;
 import de.hdodenhof.circleimageview.CircleImageView;
 
+
 /**
  * Created by 刘博 on 2020/7/16
  */
@@ -87,6 +88,7 @@ public class NotTaskFragment extends BaseFragment<MainModel> implements IMainVie
 
         mRefreshLayout.setEnableRefresh(false);
         mRefreshLayout.setEnableLoadMore(false);
+        mRlv.setFocusable(false);
 
         Bundle localBundle = getArguments();
         String localRoomName = null;
@@ -107,7 +109,6 @@ public class NotTaskFragment extends BaseFragment<MainModel> implements IMainVie
             mRlv.setLayoutManager(new LinearLayoutManager(mContext));
             mAdapter = new DeviceRlvAdapter(mList, mContext, DeviceRlvAdapter.NOTTASK_FRAGMENT);
             mRlv.setAdapter(mAdapter);
-            mAdapter.notifyDataSetChanged();
         }
 
     }
@@ -143,6 +144,7 @@ public class NotTaskFragment extends BaseFragment<MainModel> implements IMainVie
     }
 
     private void showDialog() {
+
         new AlertDialog.Builder(mContext)
                 .setTitle("提示")
                 .setIcon(R.drawable.ic_launcher_background)
@@ -166,7 +168,6 @@ public class NotTaskFragment extends BaseFragment<MainModel> implements IMainVie
     }
 
     private void callPhone() {
-
         if (XXPermissions.hasPermission(mContext, Permission.CALL_PHONE)) {
             String localPhoneText = mTaskPersonPhone.getText().toString().trim();
             if (!TextUtils.isEmpty(localPhoneText)) {
@@ -195,6 +196,5 @@ public class NotTaskFragment extends BaseFragment<MainModel> implements IMainVie
                     }
                 });
     }
-
 
 }
